@@ -6,6 +6,7 @@ import SuperbaseProvider from '@/providers/SuperbaseProvider'
 import UserProvider from '@/providers/UserProvider'
 import ModalProvider from '@/providers/ModalProvider'
 import ToasterProvider from '@/providers/ToasterProvider'
+import getSongsByUserId from '@/actions/getSongsByUserId'
 
 const font = Figtree({ subsets: ['latin'] })
 
@@ -13,12 +14,14 @@ export const metadata: Metadata = {
   title: 'Spotify Clone',
   description: 'Listen to your favourite music anytime,anywhere',
 }
+export const revalidate = 0;
 
-export default function RootLayout({
+export default  async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const userSongs = await getSongsByUserId();
   return (
     <html lang="en">
       <body className={font.className}>
@@ -26,7 +29,7 @@ export default function RootLayout({
         <SuperbaseProvider>
           <UserProvider>
             <ModalProvider/>
-        <Sidebar>
+        <Sidebar songs={userSongs}>
         {children}
         </Sidebar>
         </UserProvider>
